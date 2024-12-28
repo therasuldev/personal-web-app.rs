@@ -50,11 +50,16 @@ async fn get_user(State(db): State<Arc<Mutex<Connection>>>) -> Json<User> {
 
     Json(user)
 }
-
 async fn get_projects(State(db): State<Arc<Mutex<Connection>>>) -> Json<Vec<Project>> {
     let conn = db.lock().unwrap();
-    println!("Fetching projects...");
-    
+
+    // Static variable to keep track of the count
+    static mut COUNT: i32 = 0;
+    unsafe {
+        COUNT += 1;
+        println!("get_projects has been called {} times", COUNT);
+    }
+
     let mut stmt = conn
         .prepare("SELECT id, name, description, link FROM projects")
         .unwrap();
