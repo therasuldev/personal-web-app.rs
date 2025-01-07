@@ -6,9 +6,11 @@ use components::about_section::AboutSection;
 use components::contacts_section::ContactsSection;
 use components::header::Header;
 use components::projects_section::ProjectsSection;
+use components::work_experience_section::WorkExperienceSection;
 use services::contact_service::fetch_contacts_data;
 use services::project_service::fetch_projects_data;
 use services::user_service::fetch_user_data;
+use services::work_experience::fetch_work_experience_data;
 use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
 
@@ -19,6 +21,7 @@ fn PersonalWebUI() -> Html {
     let about = use_state(String::new);
     let projects = use_state(Vec::new);
     let contacts = use_state(Vec::new);
+    let experiences = use_state(Vec::new);
     let error = use_state(|| None::<String>);
 
     {
@@ -27,6 +30,7 @@ fn PersonalWebUI() -> Html {
         let about = about.clone();
         let projects = projects.clone();
         let contacts = contacts.clone();
+        let experiences = experiences.clone();
         let error = error.clone();
 
         use_effect_with((), move |_| {
@@ -40,6 +44,8 @@ fn PersonalWebUI() -> Html {
                 .await;
                 fetch_projects_data(projects.clone(), error.clone()).await;
                 fetch_contacts_data(contacts.clone(), error.clone()).await;
+                fetch_work_experience_data(experiences.clone(), error.clone()).await;
+
             });
 
             || ()
@@ -50,6 +56,7 @@ fn PersonalWebUI() -> Html {
         <div class="min-h-screen bg-gradient-to-b from-blue-100 to-gray-200 flex flex-col items-center py-10 px-4">
             <Header name={(*name).clone()} description={(*description).clone()} />
             <AboutSection about={(*about).clone()} />
+            <WorkExperienceSection experiences={(*experiences).clone()} />
             <ProjectsSection projects={(*projects).clone()} error={(*error).clone()} />
             <ContactsSection contacts={(*contacts).clone()} />
         </div>
