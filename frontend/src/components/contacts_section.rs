@@ -1,6 +1,7 @@
+use serde::{Deserialize, Serialize};
 use yew::prelude::*;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Contact {
     pub id: i32,
     pub name: String,
@@ -15,8 +16,8 @@ pub struct ContactsSectionProps {
 #[function_component]
 pub fn ContactsSection(props: &ContactsSectionProps) -> Html {
     html! {
-        <div class="mb-8">
-            <h2 class="text-3xl font-semibold text-center mb-8 text-gray-700">{"Contact Me"}</h2>
+        <div class="max-w-4xl w-full mt-12">
+            <h2 class="text-2xl font-semibold text-center mb-3 text-gray-700">{"Contact Me"}</h2>
             <div class="flex justify-center gap-6 flex-wrap">
                 {
                     props.contacts.iter().map(|contact| {
@@ -29,17 +30,17 @@ pub fn ContactsSection(props: &ContactsSectionProps) -> Html {
                         };
 
                         html! {
-                            <div key={contact.id} class="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 hover:bg-gray-50">
+                            <a
+                                href={link}
+                                class="flex items-center space-x-4 p-4 border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 ease-in-out transform hover:scale-105 hover:bg-gray-50"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
                                 <i class={icon_class}></i>
-                                <a
-                                    href={link}
-                                    class="text-lg text-gray-800 font-medium hover:text-indigo-600 transition-colors duration-200"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
+                                <span class="text-lg text-gray-800 font-medium hover:text-indigo-600 transition-colors duration-200">
                                     {&contact.name}
-                                </a>
-                            </div>
+                                </span>
+                            </a>
                         }
                     }).collect::<Html>()
                 }

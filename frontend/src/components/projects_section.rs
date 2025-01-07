@@ -18,8 +18,8 @@ pub struct ProjectsSectionProps {
 #[function_component]
 pub fn ProjectsSection(props: &ProjectsSectionProps) -> Html {
     html! {
-        <div class="max-w-4xl w-full mb-12">
-            <h2 class="text-3xl font-bold text-gray-800 mb-6">{"Top projects"}</h2>
+        <div class="max-w-4xl w-full mb-4">
+            <h2 class="text-2xl font-bold text-gray-800 mb-3">{"Top projects"}</h2>
             {
                 if let Some(error_message) = &props.error {
                     html! {
@@ -37,9 +37,9 @@ pub fn ProjectsSection(props: &ProjectsSectionProps) -> Html {
                         html! {
                             <div key={project.id} class="bg-white rounded-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 flex flex-col">
                                 <div class="px-6 py-4 flex-grow">
-                                    <h3 class="text-xl font-bold text-gray-800 mb-2">{&project.name}</h3>
-                                    <p class="text-gray-600 text-sm mb-4"
-                                       style="display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">
+                                    <h3 class="text-base font-bold text-gray-800 mb-2">{&project.name}</h3>
+                                    <p class="text-gray-500 text-sm mb-4"
+                                       style="display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">
                                         {&project.description}
                                     </p>
                                 </div>
