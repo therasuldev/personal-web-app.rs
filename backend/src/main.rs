@@ -1,172 +1,41 @@
-use axum::{extract::State, routing::get, Json, Router};
-use dotenv::dotenv;
-use rusqlite::Connection;
-use serde::{Deserialize, Serialize};
-use std::{
-    env,
-    sync::{Arc, Mutex},
+use axum::{
+    routing::{get, post, put},
+    Router,
 };
+use db::create_db_connection;
+use std::sync::{Arc, Mutex};
 use tower_http::cors::{Any, CorsLayer};
 
-#[derive(Debug, Serialize, Deserialize)]
-struct User {
-    id: i32,
-    fullname: String,
-    description: String,
-    about: String,
-}
+use routes::{
+    contact_routes::{add_contact, get_contacts},
+    project_routes::{add_project, get_projects},
+    user_routes::{edit_me, get_me},
+    work_experience_routes::{add_work_experience, get_work_experience},
+};
 
-#[derive(Debug, Serialize, Deserialize)]
-struct Project {
-    id: i32,
-    name: String,
-    description: String,
-    link: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct Contact {
-    id: i32,
-    name: String,
-    link: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct WorkExperience {
-    id: i32,
-    company: String,
-    position: String,
-    period: String,
-    description: String,
-}
-
-async fn get_user(State(db): State<Arc<Mutex<Connection>>>) -> Json<User> {
-    let conn = db.lock().unwrap();
-    let mut stmt = conn
-        .prepare("SELECT id, fullname, description, about FROM users LIMIT 1")
-        .unwrap();
-
-    let user = stmt
-        .query_row([], |row| {
-            Ok(User {
-                id: row.get(0)?,
-                fullname: row.get(1)?,
-                description: row.get(2)?,
-                about: row.get(3)?,
-            })
-        })
-        .unwrap();
-
-    Json(user)
-}
-async fn get_projects(State(db): State<Arc<Mutex<Connection>>>) -> Json<Vec<Project>> {
-    let conn = db.lock().unwrap();
-
-    // Static variable to keep track of the count
-    static mut COUNT: i32 = 0;
-    unsafe {
-        COUNT += 1;
-        println!("get_projects has been called {} times", COUNT);
-    }
-
-    let mut stmt = conn
-        .prepare("SELECT id, name, description, link FROM projects")
-        .unwrap();
-    let project_iter = stmt
-        .query_map([], |row| {
-            Ok(Project {
-                id: row.get(0)?,
-                name: row.get(1)?,
-                description: row.get(2)?,
-                link: row.get(3)?,
-            })
-        })
-        .unwrap();
-
-    let mut projects = Vec::new();
-    for project in project_iter {
-        projects.push(project.unwrap());
-    }
-
-    Json(projects)
-}
-
-async fn get_contacts(State(db): State<Arc<Mutex<Connection>>>) -> Json<Vec<Contact>> {
-    let conn = db.lock().unwrap();
-    let mut stmt = conn.prepare("SELECT id, name, link FROM contacts").unwrap();
-    let contact_iter = stmt
-        .query_map([], |row| {
-            Ok(Contact {
-                id: row.get(0)?,
-                name: row.get(1)?,
-                link: row.get(2)?,
-            })
-        })
-        .unwrap();
-
-    let mut contacts = Vec::new();
-    for contact in contact_iter {
-        contacts.push(contact.unwrap());
-    }
-
-    Json(contacts)
-}
-
-async fn get_work_experience(
-    State(db): State<Arc<Mutex<Connection>>>,
-) -> Json<Vec<WorkExperience>> {
-    let conn = db.lock().unwrap();
-    let mut stmt = conn
-        .prepare("SELECT id, company, position, period, description FROM work_experience")
-        .unwrap();
-    let experience_iter = stmt
-        .query_map([], |row| {
-            Ok(WorkExperience {
-                id: row.get(0)?,
-                company: row.get(1)?,
-                position: row.get(2)?,
-                period: row.get(3)?,
-                description: row.get(4)?,
-            })
-        })
-        .unwrap();
-
-    let mut experiences = Vec::new();
-    for experience in experience_iter {
-        experiences.push(experience.unwrap());
-    }
-
-    Json(experiences)
-}
-
-// Initialize database connection
-fn create_db_connection() -> Connection {
-    dotenv().ok();
-    let db_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set in .env file");
-    Connection::open(db_url).expect("Failed to connect to database")
-}
+mod db;
+mod models;
+mod routes;
 
 #[tokio::main]
 async fn main() {
-    // Initialize database connection
     let conn = create_db_connection();
-
-    // Wrap connection in Arc<Mutex> for thread-safe sharing
     let db = Arc::new(Mutex::new(conn));
 
-    // Create router with CORS enabled
     let app = Router::new()
-        .route("/user", get(get_user))
+        .route("/me", get(get_me))
+        .route("/work-experience", get(get_work_experience))
         .route("/projects", get(get_projects))
         .route("/contacts", get(get_contacts))
-        .route("/work-experience", get(get_work_experience))
+        .route("/me/edit", put(edit_me))
+        .route("/work-experience", post(add_work_experience))
+        .route("/projects", post(add_project))
+        .route("/contacts", post(add_contact))
         .layer(CorsLayer::new().allow_origin(Any))
         .with_state(db);
 
-    // Create and bind TCP listener
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     println!("Server running on http://localhost:3000");
 
-    // Start the server
     axum::serve(listener, app).await.unwrap();
 }
