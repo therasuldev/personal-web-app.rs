@@ -16,7 +16,7 @@ pub async fn fetch_user_data(
     about: UseStateHandle<String>,
     error: UseStateHandle<Option<String>>,
 ) {
-    match Request::get("http://localhost:3000/user").send().await {
+    match Request::get("http://localhost:3000/me").send().await {
         Ok(response) => match response.json::<User>().await {
             Ok(user) => {
                 name.set(user.fullname);
