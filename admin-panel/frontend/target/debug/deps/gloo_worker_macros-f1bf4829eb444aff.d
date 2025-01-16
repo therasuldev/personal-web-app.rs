@@ -1,8 +1,0 @@
-/Users/rasulramixanov/My_Projects.nosync/therasuldev-web-app/admin-panel/frontend/target/debug/deps/libgloo_worker_macros-f1bf4829eb444aff.dylib: /Users/rasulramixanov/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gloo-worker-macros-0.1.0/src/lib.rs /Users/rasulramixanov/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gloo-worker-macros-0.1.0/src/oneshot.rs /Users/rasulramixanov/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gloo-worker-macros-0.1.0/src/reactor.rs /Users/rasulramixanov/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gloo-worker-macros-0.1.0/src/worker_fn.rs
-
-/Users/rasulramixanov/My_Projects.nosync/therasuldev-web-app/admin-panel/frontend/target/debug/deps/gloo_worker_macros-f1bf4829eb444aff.d: /Users/rasulramixanov/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gloo-worker-macros-0.1.0/src/lib.rs /Users/rasulramixanov/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gloo-worker-macros-0.1.0/src/oneshot.rs /Users/rasulramixanov/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gloo-worker-macros-0.1.0/src/reactor.rs /Users/rasulramixanov/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gloo-worker-macros-0.1.0/src/worker_fn.rs
-
-/Users/rasulramixanov/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gloo-worker-macros-0.1.0/src/lib.rs:
-/Users/rasulramixanov/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gloo-worker-macros-0.1.0/src/oneshot.rs:
-/Users/rasulramixanov/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gloo-worker-macros-0.1.0/src/reactor.rs:
-/Users/rasulramixanov/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gloo-worker-macros-0.1.0/src/worker_fn.rs:
