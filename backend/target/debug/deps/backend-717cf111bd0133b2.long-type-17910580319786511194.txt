@@ -1,1 +1,0 @@
-fn(Arc<std::sync::Mutex<Connection>>) -> impl Future<Output = State<Arc<std::sync::Mutex<{type error}>, {type error}>>> {get_work_experience}
