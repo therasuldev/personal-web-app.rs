@@ -11,10 +11,24 @@ This project is a personal resume website developed using Rust and the Yew frame
 
 ## Technologies Used
 
-Rust (Backend & Frontend)
-Yew (Frontend Framework)
-SQL Database (for data persistence)
-Axum (Web Framework)
+Rust (Backend & Frontend);
+Yew (Frontend Framework);
+SQL Database (for data persistence);
+Axum (Web Framework);
+
+
+## Start
+```bash
+   cd backend
+   cargo run
+```
+then 
+
+```bash
+   cd frontend
+   trunk serve
+```
+
 
 ![Image 1](assets/1.png)
 ![Image 2](assets/2.png)
